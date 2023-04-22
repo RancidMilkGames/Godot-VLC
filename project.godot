@@ -1,0 +1,30 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="libVLCgodot"
+config/description="A sample project showing how to itegrate libVLCSharp with Godot and how to use .NET/mono packages with Godot."
+run/main_scene="res://Scenes/sample.tscn"
+config/features=PackedStringArray("4.0", "Mobile")
+boot_splash/show_image=false
+config/icon="res://Icon.png"
+
+[display]
+
+window/subwindows/embed_subwindows=false
+
+[dotnet]
+
+project/assembly_name="libVLCsolution"
+
+[rendering]
+
+renderer/rendering_method="mobile"

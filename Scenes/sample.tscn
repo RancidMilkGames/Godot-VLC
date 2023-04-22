@@ -1,0 +1,124 @@
+[gd_scene load_steps=7 format=3 uid="uid://d1cv4e2mchug6"]
+
+[ext_resource type="Script" path="res://Scripts/App.cs" id="1_i37vw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kr4t"]
+bg_color = Color(0.666667, 0.858824, 0.913725, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ltayn"]
+bg_color = Color(0.411765, 0.682353, 0.756863, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e66kt"]
+bg_color = Color(0.729412, 0.541176, 0.882353, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_vf8ju"]
+Button/font_sizes/font_size = 72
+Button/styles/hover = SubResource("StyleBoxFlat_3kr4t")
+Button/styles/normal = SubResource("StyleBoxFlat_ltayn")
+Button/styles/pressed = SubResource("StyleBoxFlat_e66kt")
+LineEdit/font_sizes/font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_cqcvs"]
+font_size = 24
+font_color = Color(0.133333, 0.133333, 0.133333, 1)
+
+[node name="Menu" type="Control" node_paths=PackedStringArray("VidPathEdit")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_vf8ju")
+script = ExtResource("1_i37vw")
+VidPathEdit = NodePath("Options/VidPath")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.890196, 0.615686, 0.737255, 1)
+
+[node name="Record" type="Button" parent="."]
+layout_mode = 1
+offset_right = 253.0
+offset_bottom = 109.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Record"
+
+[node name="Options" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -166.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Play" type="Button" parent="Options"]
+layout_mode = 2
+text = "Play
+"
+
+[node name="VidPath" type="LineEdit" parent="Options"]
+layout_mode = 2
+placeholder_text = "Video Path"
+caret_blink = true
+caret_blink_interval = 0.5
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Pressing \"Record\" will record a 5 second clip of your screen to your project folder or the folder your .exe is in if in a packaged build.
+\"Play\" will play the video at the path filled in bellow it. If blank, it will play the recording you took. If it's blank and there's no recording, it will play a sample video."
+label_settings = SubResource("LabelSettings_cqcvs")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[connection signal="pressed" from="Record" to="." method="Record"]
+[connection signal="pressed" from="Options/Play" to="." method="StartVideo"]
