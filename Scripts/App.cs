@@ -15,8 +15,15 @@ public partial class App : Node
 	private Window newWindow;
 	[Export] private LineEdit VidPathEdit;
 	[Export] private CheckBox newWindowCheck;
-	
-	
+	[Export] private RichTextLabel infoLabel;
+
+	public override void _Ready()
+	{
+		base._Ready();
+		infoLabel.ParseBbcode(infoLabel.Text);
+	}
+
+
 	// This is the method that starts the video playback
 	public void StartVideo()
 	{

@@ -60,7 +60,7 @@ RichTextLabel/colors/font_shadow_color = Color(0.2, 0.2, 0.2, 1)
 RichTextLabel/font_sizes/bold_font_size = 22
 RichTextLabel/font_sizes/normal_font_size = 24
 
-[node name="Menu" type="Control" node_paths=PackedStringArray("VidPathEdit", "newWindowCheck")]
+[node name="Menu" type="Control" node_paths=PackedStringArray("VidPathEdit", "newWindowCheck", "infoLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,6 +71,7 @@ theme = SubResource("Theme_vf8ju")
 script = ExtResource("1_i37vw")
 VidPathEdit = NodePath("Options/VidPath")
 newWindowCheck = NodePath("Options/WindowCheckBox")
+infoLabel = NodePath("MarginContainer/Label")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
