@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1cv4e2mchug6"]
+[gd_scene load_steps=9 format=3 uid="uid://d1cv4e2mchug6"]
 
+[ext_resource type="Texture2D" uid="uid://dfcevcv4hfj1q" path="res://Images/blue_boxCheckmark.png" id="1_h7wwx"]
 [ext_resource type="Script" path="res://Scripts/App.cs" id="1_i37vw"]
+[ext_resource type="Texture2D" uid="uid://dwxvua7wa2a3s" path="res://Images/grey_box.png" id="2_coq2a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kr4t"]
 bg_color = Color(0.666667, 0.858824, 0.913725, 1)
@@ -38,18 +40,27 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c6o6r"]
+
 [sub_resource type="Theme" id="Theme_vf8ju"]
+Button/colors/font_outline_color = Color(0.2, 0.2, 0.2, 1)
+Button/constants/outline_size = 10
 Button/font_sizes/font_size = 72
 Button/styles/hover = SubResource("StyleBoxFlat_3kr4t")
 Button/styles/normal = SubResource("StyleBoxFlat_ltayn")
 Button/styles/pressed = SubResource("StyleBoxFlat_e66kt")
+CheckBox/colors/font_outline_color = Color(0.2, 0.2, 0.2, 1)
+CheckBox/icons/checked = ExtResource("1_h7wwx")
+CheckBox/icons/unchecked = ExtResource("2_coq2a")
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_c6o6r")
 LineEdit/font_sizes/font_size = 32
+RichTextLabel/colors/default_color = Color(0.2, 0.2, 0.2, 1)
+RichTextLabel/colors/font_outline_color = Color(0.2, 0.2, 0.2, 1)
+RichTextLabel/colors/font_shadow_color = Color(0.2, 0.2, 0.2, 1)
+RichTextLabel/font_sizes/bold_font_size = 22
+RichTextLabel/font_sizes/normal_font_size = 24
 
-[sub_resource type="LabelSettings" id="LabelSettings_cqcvs"]
-font_size = 24
-font_color = Color(0.133333, 0.133333, 0.133333, 1)
-
-[node name="Menu" type="Control" node_paths=PackedStringArray("VidPathEdit")]
+[node name="Menu" type="Control" node_paths=PackedStringArray("VidPathEdit", "newWindowCheck")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -59,11 +70,13 @@ grow_vertical = 2
 theme = SubResource("Theme_vf8ju")
 script = ExtResource("1_i37vw")
 VidPathEdit = NodePath("Options/VidPath")
+newWindowCheck = NodePath("Options/WindowCheckBox")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 2
-offset_right = 1152.0
-offset_bottom = 648.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.890196, 0.615686, 0.737255, 1)
@@ -75,6 +88,27 @@ offset_bottom = 109.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Record"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -154.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="Label" type="RichTextLabel" parent="MarginContainer"]
+clip_contents = false
+layout_mode = 2
+theme_override_constants/outline_size = 2
+bbcode_enabled = true
+text = "[center][b]Pressing [color=red][bgcolor=#ccccc][outline_size=5]\"Record\"[/outline_size][/bgcolor][/color] will record a 5 second clip of your screen to your project folder or the folder your .exe is in if in a packaged build.
+[color=green][outline_size=5][bgcolor=#ccccc]\"Play\"[/bgcolor][/outline_size][/color]  will play the video at the path filled in bellow it. If blank, it will play the recording you took. If it's blank and there's no recording, it will play a sample video.[/b][/center]"
 
 [node name="Options" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -88,8 +122,17 @@ grow_vertical = 0
 size_flags_vertical = 4
 alignment = 1
 
+[node name="WindowCheckBox" type="CheckBox" parent="Options"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "Play in New Window?"
+flat = true
+alignment = 1
+
 [node name="Play" type="Button" parent="Options"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Play
 "
 
@@ -98,27 +141,6 @@ layout_mode = 2
 placeholder_text = "Video Path"
 caret_blink = true
 caret_blink_interval = 0.5
-
-[node name="Label" type="Label" parent="."]
-custom_minimum_size = Vector2(800, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Pressing \"Record\" will record a 5 second clip of your screen to your project folder or the folder your .exe is in if in a packaged build.
-\"Play\" will play the video at the path filled in bellow it. If blank, it will play the recording you took. If it's blank and there's no recording, it will play a sample video."
-label_settings = SubResource("LabelSettings_cqcvs")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
 
 [connection signal="pressed" from="Record" to="." method="Record"]
 [connection signal="pressed" from="Options/Play" to="." method="StartVideo"]

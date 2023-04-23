@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Godot;
 using LibVLCSharp.Shared;
@@ -13,34 +12,36 @@ public partial class App : Node
 	private IntPtr windowHandle;
 	private MediaPlayer mediaPlayer;
 	private LibVLC libVLC;
+	private Window newWindow;
 	[Export] private LineEdit VidPathEdit;
-
-	public override void _Ready()
-	{
-		base._Ready();
-		// Find the window handle of the Godot window
-		GetAppWindow();
-	}
-
-	public void GetAppWindow()
-	{
-		// Get all running processes
-		Process[] processlist = Process.GetProcesses();
-		// iterate through all processes
-		foreach (Process process in processlist)
-		{
-			// We want to find the Godot project process, but not the Godot editor process
-			if (process.ProcessName.Contains("Godot") && !process.MainWindowTitle.Contains("Godot Engine"))
-			{
-				// Once found we store the window handle
-				windowHandle = process.MainWindowHandle;
-			}
-		}
-	}
+	[Export] private CheckBox newWindowCheck;
+	
 	
 	// This is the method that starts the video playback
 	public void StartVideo()
 	{
+		// Do we have the play in new window checkbox checked?
+		if (newWindowCheck.ButtonPressed)
+		{
+			// If so, we'll create a new window
+			newWindow = new Window();
+			// Add the new window to the scene tree
+			AddChild(newWindow);
+			// Set the name of the window
+			newWindow.Name = "Video Player";
+			// Subscribe to the CloseRequested event so we can clean up
+			newWindow.CloseRequested += NewWindowOnCloseRequested;
+			// Set the size and position of the window
+			newWindow.PopupCentered(new Vector2I(700, 500));
+			// Get the window handle of the new window
+			windowHandle = (IntPtr)DisplayServer.WindowGetNativeHandle(DisplayServer.HandleType.WindowHandle, 1);
+		}
+		else
+		{
+			// If not, we'll use the Godot window
+			windowHandle = (IntPtr)DisplayServer.WindowGetNativeHandle(DisplayServer.HandleType.WindowHandle, 0);
+		}
+
 		// Initialize the libVLC library
 		libVLC = new LibVLC();
 		// Create a new MediaPlayer instance
@@ -75,7 +76,20 @@ public partial class App : Node
 		// Clean up
 		mediaPlayer.Dispose();
 		libVLC.Dispose();
+		if (newWindowCheck.ButtonPressed)
+		{
+			newWindow.QueueFree();
+		}
 	}
+	
+	private void NewWindowOnCloseRequested()
+	{
+		// Clean up
+		newWindow.QueueFree();
+		mediaPlayer.Dispose();
+		libVLC.Dispose();
+	}
+	
 
 	// A Godot signal is connected to this method, which starts the recording process
 	// A Godot signal can't call a Task function, which we need for recording
